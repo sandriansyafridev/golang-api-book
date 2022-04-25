@@ -13,6 +13,7 @@ type BookService interface {
 	FindByID(BookID int) (response.BookResponse, error)
 	Delete(BookID int) error
 	Create(request dto.BookCreateDTO) (response.BookResponse, error)
+	Update(request dto.BookUpdateDTO) (response.BookResponse, error)
 }
 
 type BookServiceImpl struct {
@@ -38,9 +39,28 @@ func (bookService *BookServiceImpl) FindByID(BookID int) (response.BookResponse,
 	}
 }
 
+func (bookService *BookServiceImpl) Update(request dto.BookUpdateDTO) (response.BookResponse, error) {
+	bookResponse := response.BookResponse{}
+	if book, err := bookService.BookRepository.FindByID(int(request.ID)); err != nil {
+		return bookResponse, err
+	} else {
+		book.Title = request.Title
+		book.Description = request.Description
+		book.Price = request.Price
+		book.Rating = request.Rating
+
+		if bookUpdated, err := bookService.BookRepository.Update(book); err != nil {
+			return bookResponse, err
+		} else {
+			bookResponse = formatter.ToBookResponse(bookUpdated)
+			return bookResponse, nil
+		}
+	}
+}
+
 func (bookService *BookServiceImpl) Create(request dto.BookCreateDTO) (response.BookResponse, error) {
 
-	book := mapping.ToBook(request)
+	book := mapping.ToBookCreate(request)
 	if bookCreated, err := bookService.BookRepository.Create(book); err != nil {
 		return response.BookResponse{}, err
 	} else {

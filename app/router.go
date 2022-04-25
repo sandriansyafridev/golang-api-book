@@ -12,6 +12,7 @@ func NewRouter(bookHandler handler.BookHandler) *gin.Engine {
 	v1.GET("/books", bookHandler.FindAll)
 	v1.POST("/books", bookHandler.Create)
 	v1.GET("/books/:id", bookHandler.FindByID)
+	v1.PUT("/books/:id", bookHandler.Update)
 	v1.DELETE("/books/:id", bookHandler.Delete)
 
 	return r

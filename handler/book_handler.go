@@ -15,6 +15,7 @@ type BookHandler interface {
 	FindByID(c *gin.Context)
 	Delete(c *gin.Context)
 	Create(c *gin.Context)
+	Update(c *gin.Context)
 }
 
 type BookHandlerImpl struct {
@@ -54,6 +55,26 @@ func (bookHandler *BookHandlerImpl) Create(c *gin.Context) {
 	}
 
 	if bookResponse, err := bookHandler.BookService.Create(request); err != nil {
+		webResponse := formatter.BuildResponseError(http.StatusUnprocessableEntity, err.Error())
+		c.JSON(http.StatusNotFound, webResponse)
+	} else {
+		webResponse := formatter.BuildResponseSuccess(http.StatusOK, bookResponse)
+		c.JSON(http.StatusOK, webResponse)
+	}
+}
+
+func (bookHandler *BookHandlerImpl) Update(c *gin.Context) {
+	BookID, _ := strconv.Atoi(c.Param("id"))
+	request := dto.BookUpdateDTO{}
+	if err := c.ShouldBindJSON(&request); err != nil {
+		webResponse := formatter.BuildResponseError(http.StatusBadRequest, err.Error())
+		c.JSON(http.StatusNotFound, webResponse)
+		return
+	}
+
+	request.ID = uint64(BookID)
+
+	if bookResponse, err := bookHandler.BookService.Update(request); err != nil {
 		webResponse := formatter.BuildResponseError(http.StatusUnprocessableEntity, err.Error())
 		c.JSON(http.StatusNotFound, webResponse)
 	} else {

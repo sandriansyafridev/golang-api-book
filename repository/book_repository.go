@@ -10,6 +10,7 @@ type BookRepository interface {
 	FindByID(BookID int) (entity.Book, error)
 	Delete(book entity.Book) error
 	Create(book entity.Book) (entity.Book, error)
+	Update(book entity.Book) (entity.Book, error)
 }
 
 type BookRepositoryImpl struct {
@@ -47,6 +48,16 @@ func (bookRepository *BookRepositoryImpl) Delete(book entity.Book) error {
 func (bookRepository *BookRepositoryImpl) Create(book entity.Book) (entity.Book, error) {
 
 	if err := bookRepository.DB.Create(&book).Error; err != nil {
+		return book, err
+	} else {
+		return book, nil
+	}
+
+}
+
+func (bookRepository *BookRepositoryImpl) Update(book entity.Book) (entity.Book, error) {
+
+	if err := bookRepository.DB.Save(&book).Error; err != nil {
 		return book, err
 	} else {
 		return book, nil

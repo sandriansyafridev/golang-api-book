@@ -5,7 +5,7 @@ import (
 	"github.com/sandriansyafridev/golang/api/book/model/entity"
 )
 
-func ToBook(request dto.BookCreateDTO) entity.Book {
+func ToBookCreate(request dto.BookCreateDTO) entity.Book {
 	return entity.Book{
 		Title:       request.Title,
 		Description: request.Description,
