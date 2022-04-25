@@ -10,6 +10,7 @@ func NewRouter(bookHandler handler.BookHandler) *gin.Engine {
 
 	v1 := r.Group("/api/v1")
 	v1.GET("/books", bookHandler.FindAll)
+	v1.GET("/books/:id", bookHandler.FindByID)
 
 	return r
 }

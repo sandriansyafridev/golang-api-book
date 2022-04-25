@@ -8,6 +8,7 @@ import (
 
 type BookService interface {
 	FindAll() ([]response.BookResponse, error)
+	FindByID(BookID int) (response.BookResponse, error)
 }
 
 type BookServiceImpl struct {
@@ -21,6 +22,17 @@ func (bookService *BookServiceImpl) FindAll() ([]response.BookResponse, error) {
 		booksResponse := formatter.FormatToBooksResponse(books)
 		return booksResponse, nil
 	}
+}
+
+func (bookService *BookServiceImpl) FindByID(BookID int) (response.BookResponse, error) {
+
+	if book, err := bookService.BookRepository.FindByID(BookID); err != nil {
+		return response.BookResponse{}, err
+	} else {
+		bookResponse := formatter.FormatToBookResponse(book)
+		return bookResponse, nil
+	}
+
 }
 
 func NewBookServiceImpl(bookRepository repository.BookRepository) *BookServiceImpl {

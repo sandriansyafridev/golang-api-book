@@ -7,6 +7,7 @@ import (
 
 type BookRepository interface {
 	FindAll() ([]entity.Book, error)
+	FindByID(BookID int) (entity.Book, error)
 }
 
 type BookRepositoryImpl struct {
@@ -18,9 +19,19 @@ func (bookRepository *BookRepositoryImpl) FindAll() ([]entity.Book, error) {
 	books := []entity.Book{}
 	if err := bookRepository.DB.Find(&books).Error; err != nil {
 		return books, err
+	} else {
+		return books, nil
 	}
+}
 
-	return books, nil
+func (bookRepository *BookRepositoryImpl) FindByID(BookID int) (entity.Book, error) {
+
+	book := entity.Book{}
+	if err := bookRepository.DB.First(&book, BookID).Error; err != nil {
+		return book, err
+	} else {
+		return book, nil
+	}
 }
 
 func NewBookRepositoryImpl(db *gorm.DB) *BookRepositoryImpl {
