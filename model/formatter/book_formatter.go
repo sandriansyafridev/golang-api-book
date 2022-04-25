@@ -5,7 +5,7 @@ import (
 	"github.com/sandriansyafridev/golang/api/book/model/response"
 )
 
-func FormatToBookResponse(book entity.Book) response.BookResponse {
+func ToBookResponse(book entity.Book) response.BookResponse {
 
 	return response.BookResponse{
 		ID:          book.ID,
@@ -18,11 +18,11 @@ func FormatToBookResponse(book entity.Book) response.BookResponse {
 	}
 }
 
-func FormatToBooksResponse(books []entity.Book) []response.BookResponse {
+func ToBooksResponse(books []entity.Book) []response.BookResponse {
 
 	booksResponse := []response.BookResponse{}
 	for _, book := range books {
-		bookResponse := FormatToBookResponse(book)
+		bookResponse := ToBookResponse(book)
 		booksResponse = append(booksResponse, bookResponse)
 	}
 

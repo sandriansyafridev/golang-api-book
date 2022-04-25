@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sandriansyafridev/golang/api/book/model/dto"
 	"github.com/sandriansyafridev/golang/api/book/model/formatter"
 	"github.com/sandriansyafridev/golang/api/book/service"
 )
@@ -13,6 +14,7 @@ type BookHandler interface {
 	FindAll(c *gin.Context)
 	FindByID(c *gin.Context)
 	Delete(c *gin.Context)
+	Create(c *gin.Context)
 }
 
 type BookHandlerImpl struct {
@@ -41,6 +43,24 @@ func (bookHandler *BookHandlerImpl) FindByID(c *gin.Context) {
 		webResponse := formatter.BuildResponseSuccess(http.StatusOK, bookResponse)
 		c.JSON(http.StatusOK, webResponse)
 	}
+}
+func (bookHandler *BookHandlerImpl) Create(c *gin.Context) {
+
+	request := dto.BookCreateDTO{}
+	if err := c.ShouldBindJSON(&request); err != nil {
+		webResponse := formatter.BuildResponseError(http.StatusBadRequest, err.Error())
+		c.JSON(http.StatusNotFound, webResponse)
+		return
+	}
+
+	if bookResponse, err := bookHandler.BookService.Create(request); err != nil {
+		webResponse := formatter.BuildResponseError(http.StatusUnprocessableEntity, err.Error())
+		c.JSON(http.StatusNotFound, webResponse)
+	} else {
+		webResponse := formatter.BuildResponseSuccess(http.StatusOK, bookResponse)
+		c.JSON(http.StatusOK, webResponse)
+	}
+
 }
 
 func (bookHandler *BookHandlerImpl) Delete(c *gin.Context) {
