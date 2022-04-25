@@ -9,6 +9,7 @@ import (
 type BookService interface {
 	FindAll() ([]response.BookResponse, error)
 	FindByID(BookID int) (response.BookResponse, error)
+	Delete(BookID int) error
 }
 
 type BookServiceImpl struct {
@@ -32,7 +33,18 @@ func (bookService *BookServiceImpl) FindByID(BookID int) (response.BookResponse,
 		bookResponse := formatter.FormatToBookResponse(book)
 		return bookResponse, nil
 	}
+}
 
+func (bookService *BookServiceImpl) Delete(BookID int) error {
+	if book, err := bookService.BookRepository.FindByID(BookID); err != nil {
+		return err
+	} else {
+		if err := bookService.BookRepository.Delete(book); err != nil {
+			return err
+		} else {
+			return nil
+		}
+	}
 }
 
 func NewBookServiceImpl(bookRepository repository.BookRepository) *BookServiceImpl {

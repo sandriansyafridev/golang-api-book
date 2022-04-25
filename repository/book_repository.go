@@ -8,6 +8,7 @@ import (
 type BookRepository interface {
 	FindAll() ([]entity.Book, error)
 	FindByID(BookID int) (entity.Book, error)
+	Delete(book entity.Book) error
 }
 
 type BookRepositoryImpl struct {
@@ -31,6 +32,14 @@ func (bookRepository *BookRepositoryImpl) FindByID(BookID int) (entity.Book, err
 		return book, err
 	} else {
 		return book, nil
+	}
+}
+
+func (bookRepository *BookRepositoryImpl) Delete(book entity.Book) error {
+	if err := bookRepository.DB.Delete(&book).Error; err != nil {
+		return err
+	} else {
+		return nil
 	}
 }
 

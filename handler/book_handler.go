@@ -12,6 +12,7 @@ import (
 type BookHandler interface {
 	FindAll(c *gin.Context)
 	FindByID(c *gin.Context)
+	Delete(c *gin.Context)
 }
 
 type BookHandlerImpl struct {
@@ -38,6 +39,18 @@ func (bookHandler *BookHandlerImpl) FindByID(c *gin.Context) {
 		c.JSON(http.StatusNotFound, webResponse)
 	} else {
 		webResponse := formatter.BuildResponseSuccess(http.StatusOK, bookResponse)
+		c.JSON(http.StatusOK, webResponse)
+	}
+}
+
+func (bookHandler *BookHandlerImpl) Delete(c *gin.Context) {
+	BookID, _ := strconv.Atoi(c.Param("id"))
+
+	if err := bookHandler.BookService.Delete(BookID); err != nil {
+		webResponse := formatter.BuildResponseError(http.StatusUnprocessableEntity, err.Error())
+		c.JSON(http.StatusNotFound, webResponse)
+	} else {
+		webResponse := formatter.BuildResponseSuccess(http.StatusOK, gin.H{"deleted": true})
 		c.JSON(http.StatusOK, webResponse)
 	}
 
