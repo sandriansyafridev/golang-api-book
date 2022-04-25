@@ -5,10 +5,11 @@ import (
 	"github.com/sandriansyafridev/golang/api/book/handler"
 )
 
-func NewRouter(pingHandler handler.PingHandler) *gin.Engine {
+func NewRouter(bookHandler handler.BookHandler) *gin.Engine {
 	r := gin.Default()
 
-	r.GET("/ping", pingHandler.Ping)
+	v1 := r.Group("/api/v1")
+	v1.GET("/books", bookHandler.FindAll)
 
 	return r
 }
