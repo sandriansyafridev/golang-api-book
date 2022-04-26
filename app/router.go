@@ -16,7 +16,9 @@ func NewRouter(bookHandler handler.BookHandler, userHandler handler.UserHandler)
 	v1.DELETE("/books/:id", bookHandler.Delete)
 
 	v1.GET("/users", userHandler.FindAll)
+	v1.POST("/users", userHandler.Create)
 	v1.GET("/users/:id", userHandler.FindByID)
+	v1.PUT("/users/:id", userHandler.Update)
 	v1.DELETE("/users/:id", userHandler.Delete)
 
 	return r
