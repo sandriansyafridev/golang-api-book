@@ -2,6 +2,7 @@ package app
 
 import (
 	"log"
+	"time"
 
 	"github.com/sandriansyafridev/golang/api/book/model/entity"
 	"gorm.io/driver/mysql"
@@ -16,17 +17,17 @@ func NewDatabase() *gorm.DB {
 		log.Panic(err)
 	}
 
-	db.AutoMigrate(&entity.Book{})
-
-	return db
-
-}
-
-func CloseDatabase(db *gorm.DB) {
 	sqlDB, err := db.DB()
 	if err != nil {
 		log.Panic(err)
 	}
 
-	sqlDB.Close()
+	sqlDB.SetMaxIdleConns(10)           // SetMaxIdleConns sets the maximum number of connections in the idle connection pool.
+	sqlDB.SetMaxOpenConns(100)          // SetMaxOpenConns sets the maximum number of open connections to the database.
+	sqlDB.SetConnMaxLifetime(time.Hour) // SetConnMaxLifetime sets the maximum amount of time a connection may be reused.
+
+	db.AutoMigrate(&entity.User{}, &entity.Book{})
+
+	return db
+
 }
