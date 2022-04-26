@@ -20,7 +20,10 @@ func InitializedRouter() *gin.Engine {
 	bookRepositoryImpl := repository.NewBookRepositoryImpl(db)
 	bookServiceImpl := service.NewBookServiceImpl(bookRepositoryImpl)
 	bookHandlerImpl := handler.NewBookHandlerImpl(bookServiceImpl)
-	engine := NewRouter(bookHandlerImpl)
+	userRepositoryImpl := repository.NewUserRepositoryImpl(db)
+	userServiceImpl := service.NewUserServiceImpl(userRepositoryImpl)
+	userHandlerImpl := handler.NewUserHandlerImpl(userServiceImpl)
+	engine := NewRouter(bookHandlerImpl, userHandlerImpl)
 	return engine
 }
 
@@ -28,4 +31,6 @@ func InitializedRouter() *gin.Engine {
 
 var (
 	BookSet = wire.NewSet(wire.Bind(new(repository.BookRepository), new(*repository.BookRepositoryImpl)), wire.Bind(new(service.BookService), new(*service.BookServiceImpl)), wire.Bind(new(handler.BookHandler), new(*handler.BookHandlerImpl)), repository.NewBookRepositoryImpl, service.NewBookServiceImpl, handler.NewBookHandlerImpl)
+
+	UserSet = wire.NewSet(wire.Bind(new(repository.UserRepository), new(*repository.UserRepositoryImpl)), wire.Bind(new(service.UserService), new(*service.UserServiceImpl)), wire.Bind(new(handler.UserHandler), new(*handler.UserHandlerImpl)), repository.NewUserRepositoryImpl, service.NewUserServiceImpl, handler.NewUserHandlerImpl)
 )
