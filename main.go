@@ -1,8 +1,6 @@
 package main
 
-import (
-	"github.com/sandriansyafridev/golang/api/book/app"
-)
+import "github.com/sandriansyafridev/golang/api/book/app"
 
 func main() {
 
