@@ -26,7 +26,7 @@ func NewDatabase() *gorm.DB {
 	sqlDB.SetMaxOpenConns(100)          // SetMaxOpenConns sets the maximum number of open connections to the database.
 	sqlDB.SetConnMaxLifetime(time.Hour) // SetConnMaxLifetime sets the maximum amount of time a connection may be reused.
 
-	db.AutoMigrate(&entity.User{}, &entity.Book{})
+	db.AutoMigrate(&entity.User{}, &entity.Book{}, &entity.Member{})
 
 	return db
 

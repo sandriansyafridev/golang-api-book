@@ -29,6 +29,15 @@ var (
 		service.NewUserServiceImpl,
 		handler.NewUserHandlerImpl,
 	)
+
+	MemberSet = wire.NewSet(
+		wire.Bind(new(repository.MemberRepository), new(*repository.MemberRepositoryImpl)),
+		wire.Bind(new(service.MemberService), new(*service.MemberServiceImpl)),
+		wire.Bind(new(handler.MemberHandler), new(*handler.MemberHandlerImpl)),
+		repository.NewMemberRepositoryImpl,
+		service.NewMemberServiceImpl,
+		handler.NewMemberHandlerImpl,
+	)
 )
 
 func InitializedRouter() *gin.Engine {
@@ -38,6 +47,7 @@ func InitializedRouter() *gin.Engine {
 		NewRouter,
 		BookSet,
 		UserSet,
+		MemberSet,
 	)
 
 	return nil
